@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Dialog">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../JarFiiles/Dialog.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
