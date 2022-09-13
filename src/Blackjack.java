@@ -45,7 +45,7 @@ public class Blackjack extends GraphicsProgram {
 
     @Override
     public void init() {
-        Color background = new Color(90, 100, 200);
+        Color background = new Color(44, 152, 37);
         this.setBackground(Color.LIGHT_GRAY);
 
 
@@ -241,6 +241,7 @@ public class Blackjack extends GraphicsProgram {
 
     }
     public void stay() {
+        dealer.flipCard(0);
 
         if (player.getTotal() > dealer.getTotal()) {
             Dialog.showMessage("You win");
@@ -258,6 +259,7 @@ public class Blackjack extends GraphicsProgram {
                 Dialog.showMessage("You bank-ruptted the bank, you Win!!");
 
 
+
             }
 
             reset();
@@ -271,6 +273,7 @@ public class Blackjack extends GraphicsProgram {
             balanceLabel.setLabel("Your balance: " + balance);
             wagerLabel.setLabel("Your wager: " + wager);
             bankLabel.setLabel("Banks money: " + bank);
+
             reset();
 
 
@@ -279,14 +282,13 @@ public class Blackjack extends GraphicsProgram {
             Dialog.showMessage("No one wins its a tie");
             Dialog.showMessage("Your total was equal to: " + player.getTotal());
             Dialog.showMessage("Dealers total was equal to: " + dealer.getTotal());
+
             reset();
 
 
 
         }
-        // show our dealers card
 
-        dealer.flipCard(0);
     }
 
 

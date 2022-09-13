@@ -45,7 +45,7 @@ public class GCard extends GCompound{
     public void flip(){
         card.flip();
 
-//        back.setVisible(!back.setVisible());
+        back.setVisible(!back.isVisible());
     }
 
     public int getValue(){
