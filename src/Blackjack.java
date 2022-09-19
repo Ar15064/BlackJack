@@ -45,7 +45,7 @@ public class Blackjack extends GraphicsProgram {
 
     @Override
     public void init() {
-        Color background = new Color(44, 152, 37);
+        Color background = new Color(90, 100, 200);
         this.setBackground(Color.LIGHT_GRAY);
 
 
@@ -72,9 +72,18 @@ public class Blackjack extends GraphicsProgram {
         stayButton.setVisible(false);
         playButton.setVisible(false);
 
-        balanceLabel = new GLabel("Starting balance is : " + balance);
 
-        add(balanceLabel,10,70);
+
+        wagerLabel = new GLabel("");
+        bankLabel = new GLabel("");
+        balanceLabel = new GLabel("");
+        blackjack = new GLabel("BlackJack");
+        add(wagerLabel,10,10);
+        add(bankLabel,10,30);
+        add(balanceLabel,10,50);
+        add(blackjack,350,20);
+
+
 
 
 
@@ -147,7 +156,19 @@ public class Blackjack extends GraphicsProgram {
         stayButton.setVisible(true);
         playButton.setVisible(false);
 
-        if(player.getTotal() == 21) {
+
+
+
+        if(bank < 0) {
+            Dialog.showMessage("You bank-ruppted the bank");
+            Dialog.showMessage("You win, bye bye");
+            System.exit(1);
+
+        }
+
+
+
+        else if(player.getTotal() == 21) {
             Dialog.showMessage("You win, Your total was equal to 21");
             balance += wager;
             balance += wager;
@@ -175,32 +196,54 @@ public class Blackjack extends GraphicsProgram {
     }
     public void wager() {
 
+        if(balance == 0) {
+            Dialog.showMessage("Your out of money");
+            System.exit(1);
+        }
+
+
+        if(bank < 0) {
+            Dialog.showMessage("You bank-ruppted the bank");
+            Dialog.showMessage("You win, bye bye");
+            System.exit(1);
+
+        }
 
         wager = Dialog.getInteger("Enter a wager here: ");
         int check = wager;
-        if(balance == 0) {
+
+
+        if(check > balance) {
+            Dialog.showMessage("Enter a valid wager");
+            wager();
+
+        }
+        else if(balance < 0) {
             Dialog.showMessage("Your out of money, Sorry you lose");
             Dialog.showMessage("Bye,bye");
             System.exit(1);
 
+
         }
+        else if(bank < 0) {
+            Dialog.showMessage("You bank-ruppted the bank");
+            Dialog.showMessage("You win, bye bye");
+            System.exit(1);
+
+        }
+
+
         else if(check > balance) {
             Dialog.showMessage("Enter a valid wager");
             wager();
 
         }
-        if(check > 0) {
+        else if(check > 0) {
             wagerButton.setVisible(false);
             playButton.setVisible(true);
             balance -= wager;
-            balanceLabel.setLabel("Your balance: " + balance);
-            wagerLabel.setLabel("Your wager: " + wager);
-            bankLabel.setLabel("Banks money: " + bank);
+            updateLabels();
 
-        }
-        else if(check > balance) {
-            Dialog.showMessage("Enter a valid wager");
-            wager();
 
         }
 
@@ -218,9 +261,7 @@ public class Blackjack extends GraphicsProgram {
             bank += wager;
             wager -= wager;
 
-            balanceLabel.setLabel("Your balance: " + balance);
-            wagerLabel.setLabel("Your wager: " + wager);
-            bankLabel.setLabel("Banks money: " + bank);
+            updateLabels();
             reset();
 
 
@@ -243,7 +284,14 @@ public class Blackjack extends GraphicsProgram {
     public void stay() {
         dealer.flipCard(0);
 
-        if (player.getTotal() > dealer.getTotal()) {
+
+        if(bank < 0) {
+            Dialog.showMessage("You bank-ruptted the bank, you Win!!");
+
+
+        }
+
+        else if (player.getTotal() > dealer.getTotal()) {
             Dialog.showMessage("You win");
 
             balance += wager;
@@ -252,28 +300,20 @@ public class Blackjack extends GraphicsProgram {
             wager = 0;
 
 
-            balanceLabel.setLabel("Your balance: " + balance);
-            wagerLabel.setLabel("Your wager: " + wager);
-            bankLabel.setLabel("Banks money: " + bank);
-            if(bank == 0) {
-                Dialog.showMessage("You bank-ruptted the bank, you Win!!");
-
-
-
-            }
+            updateLabels();
 
             reset();
 
 
 
-        } else if (player.getTotal() < dealer.getTotal()) {
+        }
+        else if (player.getTotal() < dealer.getTotal()) {
             Dialog.showMessage("You lose sorry");
             bank += wager;
             wager -= wager;
             balanceLabel.setLabel("Your balance: " + balance);
             wagerLabel.setLabel("Your wager: " + wager);
             bankLabel.setLabel("Banks money: " + bank);
-
             reset();
 
 
@@ -282,13 +322,14 @@ public class Blackjack extends GraphicsProgram {
             Dialog.showMessage("No one wins its a tie");
             Dialog.showMessage("Your total was equal to: " + player.getTotal());
             Dialog.showMessage("Dealers total was equal to: " + dealer.getTotal());
-
             reset();
 
 
 
         }
+        // show our dealers card
 
+        dealer.flipCard(0);
     }
 
 
@@ -296,12 +337,13 @@ public class Blackjack extends GraphicsProgram {
 
 
     public void updateLabels() {
-        wagerLabel = new GLabel("");
-        bankLabel = new GLabel("");
-        balanceLabel = new GLabel("");
+//        wagerLabel = new GLabel("");
+//        bankLabel = new GLabel("");
+//        balanceLabel = new GLabel("");
         blackjack = new GLabel("BlackJack");
-
-        ;
+        wagerLabel.setLabel("Your wager is: " + wager);
+        bankLabel.setLabel("Banks money: " + bank);
+        balanceLabel.setLabel("Your balance is: " + balance);
 
         add(wagerLabel,10,10);
         add(bankLabel,10,30);
@@ -313,6 +355,7 @@ public class Blackjack extends GraphicsProgram {
 
     }
     public void reset() {
+        updateLabels();
         if(bank == 0) {
             bank = 10000;
         }
@@ -331,9 +374,7 @@ public class Blackjack extends GraphicsProgram {
             hitButton.setVisible(false);
             wagerButton.setVisible(true);
 
-            balanceLabel.setLabel("Your balance: " + balance);
-            wagerLabel.setLabel("Your wager: " + wager);
-            bankLabel.setLabel("Banks money: " + bank);
+            updateLabels();
         }
         else if(playAgain == false) {
             Dialog.showMessage("Thanks for playing");
