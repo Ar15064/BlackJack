@@ -23,7 +23,7 @@ public class GCard extends GCompound{
         // add the border to the compound
         add(border);
         // make a GRect for the back of the card
-        GRect back = new GRect(107, 150);
+        back = new GRect(107, 150);
         back.setFillColor(Color.BLUE);
         back.setFilled(true);
         // add the back to the compound
@@ -44,7 +44,6 @@ public class GCard extends GCompound{
 
     public void flip(){
         card.flip();
-
         back.setVisible(!back.isVisible());
     }
 
